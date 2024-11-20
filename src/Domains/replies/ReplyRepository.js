@@ -1,7 +1,8 @@
 class ReplyRepository {
   constructor() {}
 
-  async addReply(content, commentId, userId) {
+  // payload = content, commentId, userId
+  async addReply(createRepository) {
     throw new Error("REPLY_REPOSITROY.METHOD_NOT_IMPLEMENTED");
   }
 

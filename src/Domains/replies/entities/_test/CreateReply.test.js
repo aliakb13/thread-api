@@ -3,7 +3,10 @@ const CreateReply = require("../CreateReply");
 describe("A CreateReply entities", () => {
   it("should throw error when payload not contain needed property", () => {
     // Arrange
-    const payload = {};
+    const payload = {
+      content: "some content",
+      commentId: "comment-123",
+    };
 
     // Action & Assert
     expect(() => new CreateReply(payload)).toThrowError(
@@ -15,6 +18,8 @@ describe("A CreateReply entities", () => {
     // Arrange
     const payload = {
       content: 123,
+      userId: "user-123",
+      commentId: "comment-123",
     };
 
     // Action & Assert
@@ -26,13 +31,17 @@ describe("A CreateReply entities", () => {
   it("should create CreateReply object correctly", () => {
     // Arrange
     const payload = {
-      content: "some replies from comment on thread",
+      content: "some content",
+      commentId: "comment-123",
+      userId: "user-123",
     };
 
     // Action
-    const { content } = new CreateReply(payload);
+    const { content, commentId, userId } = new CreateReply(payload);
 
     // Assert
     expect(content).toEqual(payload.content);
+    expect(commentId).toEqual(payload.commentId);
+    expect(userId).toEqual(payload.userId);
   });
 });

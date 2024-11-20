@@ -5,6 +5,7 @@ describe("A CreateThread entities", () => {
     // Arrange
     const payload = {
       title: "some title",
+      body: "some body",
     };
 
     // Action & Assert
@@ -18,6 +19,7 @@ describe("A CreateThread entities", () => {
     const payload = {
       title: "some title",
       body: 123,
+      userId: "user-123",
     };
 
     // Action & Assert
@@ -31,13 +33,15 @@ describe("A CreateThread entities", () => {
     const payload = {
       title: "some title",
       body: "some body that user input",
+      userId: "user-123",
     };
 
     // Action
-    const { title, body } = new CreateThread(payload);
+    const { title, body, userId } = new CreateThread(payload);
 
     // Assert
     expect(title).toEqual(payload.title);
     expect(body).toEqual(payload.body);
+    expect(userId).toEqual(payload.userId);
   });
 });

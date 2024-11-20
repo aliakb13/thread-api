@@ -1,7 +1,8 @@
 class CommentRepository {
   constructor() {}
 
-  async addComment(content, threadId, userId) {
+  // payload content, threadId, userId
+  async addComment(createComment) {
     throw new Error("COMMENT_REPOSITORY.METHOD_NOT_IMPLEMENTED");
   }
   async deleteCommentById(commentId) {
