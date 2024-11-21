@@ -91,7 +91,7 @@ describe("ThreadRepositoryPostgres", () => {
       await UsersTableTestHelper.addUser({ id: "user-321" });
       await ThreadsTableTestHelper.addThread({
         id: "thread-321",
-        userId: "user-321",
+        owner: "user-321",
       });
 
       const threadRepositoryPostgres = new ThreadRepositoryPostgres(pool, {});
