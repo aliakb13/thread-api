@@ -1,7 +1,6 @@
 /* istanbul ignore file */
 
 const pool = require("../src/Infrastructures/database/postgres/pool");
-const CreatedComment = require("../src/Domains/comments/entities/CreatedComment");
 
 const CommentsTableTestHelper = {
   async addComment({
@@ -9,11 +8,12 @@ const CommentsTableTestHelper = {
     threadId = "thread-123",
     owner = "user-678",
     content = "some content",
+    isDeleted = false,
   }) {
     const date = new Date().toISOString();
     const query = {
-      text: "INSERT INTO comments VALUES($1, $2, $3, $4, $5) RETURNING id, content, owner",
-      values: [id, threadId, owner, content, date],
+      text: "INSERT INTO comments VALUES($1, $2, $3, $4, $5, $6) RETURNING id, content, owner",
+      values: [id, threadId, owner, content, date, isDeleted],
     };
 
     await pool.query(query);

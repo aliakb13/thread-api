@@ -5,6 +5,8 @@ const CommentRepositoryPostgres = require("../CommentRepositoryPostgres");
 const UsersTableTestHelper = require("../../../../tests/UsersTableTestHelper");
 const ThreadsTableTestHelper = require("../../../../tests/ThreadsTableTestHelper");
 const CommentsTableTestHelper = require("../../../../tests/CommentsTableTestHelper");
+const NotFoundError = require("../../../Commons/exceptions/NotFoundError");
+const AuthorizationError = require("../../../Commons/exceptions/AuthorizationError");
 
 describe("CommentRepositoryPostgres", () => {
   afterAll(async () => {
@@ -128,6 +130,86 @@ describe("CommentRepositoryPostgres", () => {
         "comment-123"
       );
       expect(threads[0].is_deleted).toEqual(true);
+    });
+  });
+
+  describe("checkCommentAvail function", () => {
+    it("should throw NotFoundError when the comment doesnt exist", async () => {
+      // Arrange
+      const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {});
+
+      // Action & Assert
+      await expect(
+        commentRepositoryPostgres.checkCommentAvail("comment-123")
+      ).rejects.toThrowError(NotFoundError);
+    });
+
+    it("shound not throw error when the comment exist", async () => {
+      // Arrange
+      await UsersTableTestHelper.addUser({
+        id: "user-123",
+        username: "user that owner thread",
+      });
+      await UsersTableTestHelper.addUser({
+        id: "user-678",
+        username: "user that comment on thread",
+      });
+      await ThreadsTableTestHelper.addThread({
+        id: "thread-123",
+        owner: "user-123",
+      });
+      await CommentsTableTestHelper.addComment({ owner: "user-678" });
+      const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {});
+
+      // Action & Assert
+      await expect(
+        commentRepositoryPostgres.checkCommentAvail("comment-123")
+      ).resolves.not.toThrow();
+    });
+  });
+
+  describe("checkIsCommentOwner function", () => {
+    it("should return AuthorizationError when user is not the owner of the comment", async () => {
+      // Arrange
+      await UsersTableTestHelper.addUser({});
+      await ThreadsTableTestHelper.addThread({ owner: "user-123" });
+      await CommentsTableTestHelper.addComment({
+        threadId: "thread-123",
+        owner: "user-123",
+      });
+      const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {});
+
+      // Action & Assert
+      await expect(
+        commentRepositoryPostgres.checkIsCommentOwner("comment-123", "user-678")
+      ).rejects.toThrowError(AuthorizationError);
+    });
+
+    it("should not throw error when the user is the owner of comment", async () => {
+      // Arrange
+      await UsersTableTestHelper.addUser({
+        id: "user-123",
+        username: "user that have thread",
+      });
+      await UsersTableTestHelper.addUser({
+        id: "user-678",
+        username: "user that comment on thread",
+      });
+      await ThreadsTableTestHelper.addThread({
+        id: "thread-123",
+        owner: "user-123",
+      });
+      await CommentsTableTestHelper.addComment({
+        id: "comment-123",
+        owner: "user-678",
+      });
+
+      const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {});
+
+      // Action & Assert
+      await expect(
+        commentRepositoryPostgres.checkIsCommentOwner("comment-123", "user-678")
+      ).resolves.not.toThrow();
     });
   });
 });
