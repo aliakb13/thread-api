@@ -31,10 +31,7 @@ class ThreadRepositoryPostgres extends ThreadRepository {
     /* SELECT threads.id, threads.title, threads.body, threads.date, users.username FROM threads INNER JOIN users ON threads.owner = users.id WHERE threads.id = $1 AND threads.owner = $2 */
 
     const query = {
-      text: `SELECT t.id AS thread_id, t.title, t.body, t.date AS thread_date, u.username AS thread_username, c.id AS comment_id, uc.username AS comment_username, c.date AS comment_date, CASE 
-        WHEN c.is_deleted THEN '**komentar telah dihapus**'
-        ELSE c.content
-    END AS comment_content FROM threads t INNER JOIN users u ON t.owner = u.id LEFT JOIN comments c ON t.id = c.thread_id LEFT JOIN users uc ON c.owner = uc.id WHERE t.id = $1 ORDER BY t.date ASC, c.date ASC`,
+      text: `SELECT t.id, t.title, t.body, t.date, u.username FROM threads t INNER JOIN users u ON t.owner = u.id WHERE t.id = $1 ORDER BY t.date ASC`,
       values: [threadId],
     };
 
@@ -45,29 +42,7 @@ class ThreadRepositoryPostgres extends ThreadRepository {
       throw new NotFoundError("thread yang dicari tidak ditemukan!");
     }
 
-    const comments = [];
-
-    result.rows.forEach((row) => {
-      if (row.comment_id) {
-        comments.push(
-          new Comment({
-            id: row.comment_id,
-            username: row.comment_username,
-            content: row.comment_content,
-            date: row.comment_date,
-          })
-        );
-      }
-    });
-
-    const thread = new Thread({
-      id: result.rows[0].thread_id,
-      title: result.rows[0].title,
-      body: result.rows[0].body,
-      date: result.rows[0].thread_date,
-      username: result.rows[0].thread_username,
-      comments,
-    });
+    const thread = new Thread({ ...result.rows[0], comments: [] });
 
     return thread;
   }

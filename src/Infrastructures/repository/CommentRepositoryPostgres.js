@@ -2,6 +2,7 @@ const AuthorizationError = require("../../Commons/exceptions/AuthorizationError"
 const NotFoundError = require("../../Commons/exceptions/NotFoundError");
 const CommentRepository = require("../../Domains/comments/CommentRepository");
 const CreatedComment = require("../../Domains/comments/entities/CreatedComment");
+const Comment = require("../../Domains/comments/entities/Comment");
 
 class CommentRepositoryPostgres extends CommentRepository {
   constructor(pool, idGenerator) {
@@ -59,6 +60,18 @@ class CommentRepositoryPostgres extends CommentRepository {
     if (!result.rowCount) {
       throw new AuthorizationError("user bukanlah pemilik dari comment!");
     }
+  }
+
+  async getCommentByThreadId(threadId) {
+    const query = {
+      text: "SELECT c.id, c.date, c.content, u.username, c.is_deleted FROM comments c JOIN threads t ON c.thread_id = t.id JOIN users u ON c.owner = u.id WHERE t.id = $1 ORDER BY c.date ASC",
+      values: [threadId],
+    };
+
+    const result = await this._pool.query(query);
+
+    const comments = result.rows.map((item) => new Comment(item).toJson());
+    return comments;
   }
 }
 

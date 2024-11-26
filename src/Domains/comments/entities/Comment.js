@@ -5,7 +5,9 @@ class Comment {
     this.id = payload.id;
     this.username = payload.username;
     this.date = payload.date;
-    this.content = payload.content;
+    this.content = payload.is_deleted
+      ? `**komentar telah dihapus**`
+      : payload.content;
   }
 
   _verifyPayload({ id, username, date, content }) {
@@ -21,6 +23,15 @@ class Comment {
     ) {
       throw new Error("COMMENT.NOT_MEET_DATA_TYPE_SPECIFICATION");
     }
+  }
+
+  toJson() {
+    return {
+      id: this.id,
+      username: this.username,
+      date: this.date,
+      content: this.content,
+    };
   }
 }
 

@@ -164,7 +164,7 @@ describe("CommentRepositoryPostgres", () => {
       // Action & Assert
       await expect(
         commentRepositoryPostgres.checkCommentAvail("comment-123")
-      ).resolves.not.toThrow();
+      ).resolves.not.toThrow(NotFoundError);
     });
   });
 
@@ -209,7 +209,59 @@ describe("CommentRepositoryPostgres", () => {
       // Action & Assert
       await expect(
         commentRepositoryPostgres.checkIsCommentOwner("comment-123", "user-678")
-      ).resolves.not.toThrow();
+      ).resolves.not.toThrowError(AuthorizationError);
+    });
+  });
+
+  describe("getCommentByThreadId function", () => {
+    it("should return comments in searched thread correctly", async () => {
+      // Arrange
+      await UsersTableTestHelper.addUser({
+        id: "user-123",
+        username: "user that have thread",
+      });
+      await UsersTableTestHelper.addUser({
+        id: "user-678",
+        username: "user that comment on thread",
+      });
+      await ThreadsTableTestHelper.addThread({ id: "thread-123" });
+      await CommentsTableTestHelper.addComment({
+        threadId: "thread-123",
+        owner: "user-678",
+        date: new Date("2024-11-24"),
+      });
+      await CommentsTableTestHelper.addComment({
+        id: "comment-345",
+        threadId: "thread-123",
+        owner: "user-123",
+        date: new Date("2024-11-25"),
+        isDeleted: true,
+      });
+
+      const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {});
+
+      // Action
+
+      const comments = await commentRepositoryPostgres.getCommentByThreadId(
+        "thread-123"
+      );
+
+      // Assert
+      const firstComment = comments[0];
+      const secondComment = comments[1];
+      expect(comments).toHaveLength(2);
+
+      // first comment
+      expect(firstComment.id).toEqual("comment-123");
+      expect(firstComment.username).toEqual("user that comment on thread");
+      expect(firstComment.date).toBeInstanceOf(Date);
+      expect(firstComment.content).toEqual("some content");
+
+      // second comment
+      expect(secondComment.id).toEqual("comment-345");
+      expect(secondComment.username).toEqual("user that have thread");
+      expect(secondComment.date).toBeInstanceOf(Date);
+      expect(secondComment.content).toEqual("**komentar telah dihapus**");
     });
   });
 });

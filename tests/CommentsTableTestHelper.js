@@ -8,9 +8,9 @@ const CommentsTableTestHelper = {
     threadId = "thread-123",
     owner = "user-678",
     content = "some content",
+    date = new Date().toISOString(),
     isDeleted = false,
   }) {
-    const date = new Date().toISOString();
     const query = {
       text: "INSERT INTO comments VALUES($1, $2, $3, $4, $5, $6) RETURNING id, content, owner",
       values: [id, threadId, owner, content, date, isDeleted],

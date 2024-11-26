@@ -18,5 +18,8 @@ describe("ReplyRepository interface", () => {
     await expect(replyRepository.checkIsReplyOwner("")).rejects.toThrowError(
       "REPLY_REPOSITROY.METHOD_NOT_IMPLEMENTED"
     );
+    await expect(
+      replyRepository.getRepliesByCommentId("")
+    ).rejects.toThrowError("REPLY_REPOSITROY.METHOD_NOT_IMPLEMENTED");
   });
 });
