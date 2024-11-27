@@ -79,35 +79,37 @@ describe("ThreadRepositoryPostgres", () => {
 
       // Action & Assert
       await expect(
-        threadRepositoryPostgres.getThreadById(
-          "someThread-123",
-          "something-123"
-        )
+        threadRepositoryPostgres.getThreadById("someThread-123")
       ).rejects.toThrowError(NotFoundError);
     });
 
     it("should return searched thread if found", async () => {
       // Arrange
-      await UsersTableTestHelper.addUser({ id: "user-321" });
+      await UsersTableTestHelper.addUser({
+        id: "user-123",
+        username: "user that have thread",
+      });
+      await UsersTableTestHelper.addUser({
+        id: "user-678",
+        username: "user that comment on thread",
+      });
       await ThreadsTableTestHelper.addThread({
-        id: "thread-321",
-        userId: "user-321",
+        id: "thread-123",
+        owner: "user-123",
       });
 
       const threadRepositoryPostgres = new ThreadRepositoryPostgres(pool, {});
 
       // Action
-      const thread = await threadRepositoryPostgres.getThreadById(
-        "thread-321",
-        "user-321"
-      );
+      const thread = await threadRepositoryPostgres.getThreadById("thread-123");
 
       // Assert
-
-      expect(thread.id).toEqual("thread-321");
+      expect(thread.id).toEqual("thread-123");
       expect(thread.title).toEqual("some title");
       expect(thread.body).toEqual("some body");
-      expect(thread.username).toEqual("dicoding");
+      expect(thread.date).not.toBeNull();
+      expect(thread.username).toEqual("user that have thread");
+      expect(thread.comments).toBeDefined();
     });
   });
 });

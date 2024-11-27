@@ -6,7 +6,7 @@ class ReplyRepository {
     throw new Error("REPLY_REPOSITROY.METHOD_NOT_IMPLEMENTED");
   }
 
-  async deleteReplyById(commentId) {
+  async deleteReplyById(replyId) {
     throw new Error("REPLY_REPOSITROY.METHOD_NOT_IMPLEMENTED");
   }
 
@@ -15,6 +15,10 @@ class ReplyRepository {
   }
 
   async checkIsReplyOwner(replyId, userId) {
+    throw new Error("REPLY_REPOSITROY.METHOD_NOT_IMPLEMENTED");
+  }
+
+  async getRepliesByCommentId(commentId) {
     throw new Error("REPLY_REPOSITROY.METHOD_NOT_IMPLEMENTED");
   }
 }

@@ -1,5 +1,7 @@
 const ThreadRepository = require("../../Domains/threads/ThreadRepository");
 const CreatedThread = require("../../Domains/threads/entities/CreatedThread");
+const Thread = require("../../Domains/threads/entities/Thread");
+const Comment = require("../../Domains/comments/entities/Comment");
 const NotFoundError = require("../../Commons/exceptions/NotFoundError");
 
 class ThreadRepositoryPostgres extends ThreadRepository {
@@ -24,10 +26,13 @@ class ThreadRepositoryPostgres extends ThreadRepository {
     return new CreatedThread({ ...result.rows[0] });
   }
 
-  async getThreadById(threadId, userId) {
+  async getThreadById(threadId) {
+    // old query
+    /* SELECT threads.id, threads.title, threads.body, threads.date, users.username FROM threads INNER JOIN users ON threads.owner = users.id WHERE threads.id = $1 AND threads.owner = $2 */
+
     const query = {
-      text: "SELECT threads.id, threads.title, threads.body, threads.date, users.username FROM threads INNER JOIN users ON threads.owner = users.id WHERE threads.id = $1 AND threads.owner = $2",
-      values: [threadId, userId],
+      text: `SELECT t.id, t.title, t.body, t.date, u.username FROM threads t INNER JOIN users u ON t.owner = u.id WHERE t.id = $1 ORDER BY t.date ASC`,
+      values: [threadId],
     };
 
     const result = await this._pool.query(query);
@@ -36,7 +41,10 @@ class ThreadRepositoryPostgres extends ThreadRepository {
     if (!result.rowCount) {
       throw new NotFoundError("thread yang dicari tidak ditemukan!");
     }
-    return result.rows[0];
+
+    const thread = new Thread({ ...result.rows[0], comments: [] });
+
+    return thread;
   }
 
   // async checkThreadAvail(threadId) {}

@@ -6,6 +6,7 @@ describe("A CreateReply entities", () => {
     const payload = {
       content: "some content",
       commentId: "comment-123",
+      userId: "user-123",
     };
 
     // Action & Assert
@@ -20,6 +21,7 @@ describe("A CreateReply entities", () => {
       content: 123,
       userId: "user-123",
       commentId: "comment-123",
+      threadId: "thread-123",
     };
 
     // Action & Assert
@@ -34,6 +36,7 @@ describe("A CreateReply entities", () => {
       content: "some content",
       commentId: "comment-123",
       userId: "user-123",
+      threadId: "thread-123",
     };
 
     // Action
