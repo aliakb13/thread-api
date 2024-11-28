@@ -37,9 +37,7 @@ class ThreadRepositoryPostgres extends ThreadRepository {
 
     const result = await this._pool.query(query);
 
-    const thread = new Thread({ ...result.rows[0], comments: [] });
-
-    return thread;
+    return new Thread({ ...result.rows[0], comments: [] });
   }
 
   async checkThreadAvail(threadId) {
