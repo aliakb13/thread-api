@@ -2,7 +2,7 @@ const routes = (handler) => [
   {
     method: "POST",
     path: "/threads/{threadId}/comments",
-    handler: handler.postThreadHandler,
+    handler: handler.postCommentHandler,
     options: {
       auth: "forumapiauth_jwt",
     },
