@@ -170,6 +170,37 @@ describe("ReplyRepositoryPostgres", () => {
         replyRepositoryPostgres.checkReplyAvail("reply-123")
       ).resolves.not.toThrowError(NotFoundError);
     });
+
+    it("should throw error if user deleted the reply (even just soft delete)", async () => {
+      // Arrange
+      await UsersTableTestHelper.addUser({
+        id: "user-123",
+        username: "first user",
+      });
+      await UsersTableTestHelper.addUser({
+        id: "user-345",
+        username: "second user",
+      });
+      await ThreadsTableTestHelper.addThread({
+        id: "thread-123",
+        owner: "user-123",
+      });
+      await CommentsTableTestHelper.addComment({
+        id: "comment-123",
+        owner: "user-345",
+      });
+      await RepliesTableTestHelper.addReply({
+        owner: "user-123",
+        isDeleted: true,
+      });
+
+      const replyRepositoryPostgres = new ReplyRepositoryPostgres(pool, {});
+
+      // Action & Assert
+      await expect(
+        replyRepositoryPostgres.checkReplyAvail("reply-123")
+      ).rejects.toThrow(NotFoundError);
+    });
   });
 
   describe("checkIsReplyOwner function", () => {

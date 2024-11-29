@@ -166,6 +166,22 @@ describe("CommentRepositoryPostgres", () => {
         commentRepositoryPostgres.checkCommentAvail("comment-123")
       ).resolves.not.toThrow(NotFoundError);
     });
+
+    it("should throw error if user deleted the comment (even just soft delete)", async () => {
+      // Arrange
+      await UsersTableTestHelper.addUser({});
+      await ThreadsTableTestHelper.addThread({});
+      await CommentsTableTestHelper.addComment({
+        owner: "user-123",
+        isDeleted: true,
+      });
+      const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {});
+
+      // Action & Assert
+      await expect(
+        commentRepositoryPostgres.checkCommentAvail("comment-123")
+      ).rejects.toThrow(NotFoundError);
+    });
   });
 
   describe("checkIsCommentOwner function", () => {

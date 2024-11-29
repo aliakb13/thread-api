@@ -38,7 +38,7 @@ class CommentRepositoryPostgres extends CommentRepository {
 
   async checkCommentAvail(commentId) {
     const query = {
-      text: "SELECT * FROM comments WHERE id = $1",
+      text: "SELECT * FROM comments WHERE id = $1 AND is_deleted = false",
       values: [commentId],
     };
 

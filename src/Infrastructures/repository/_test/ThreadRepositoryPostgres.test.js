@@ -72,17 +72,6 @@ describe("ThreadRepositoryPostgres", () => {
   });
 
   describe("getThreadById function", () => {
-    it("should return NotFoundError if the searched thread not found", async () => {
-      // Arrange
-      await UsersTableTestHelper.addUser({ id: "something-123" });
-      const threadRepositoryPostgres = new ThreadRepositoryPostgres(pool, {});
-
-      // Action & Assert
-      await expect(
-        threadRepositoryPostgres.getThreadById("someThread-123")
-      ).rejects.toThrowError(NotFoundError);
-    });
-
     it("should return searched thread if found", async () => {
       // Arrange
       await UsersTableTestHelper.addUser({
@@ -110,6 +99,31 @@ describe("ThreadRepositoryPostgres", () => {
       expect(thread.date).not.toBeNull();
       expect(thread.username).toEqual("user that have thread");
       expect(thread.comments).toBeDefined();
+    });
+  });
+
+  describe("checkThreadAvail function", () => {
+    it("should throw NotFoundError if the searched thread not found", async () => {
+      // Arrange
+      await UsersTableTestHelper.addUser({ id: "something-123" });
+      const threadRepositoryPostgres = new ThreadRepositoryPostgres(pool, {});
+
+      // Action & Assert
+      await expect(
+        threadRepositoryPostgres.checkThreadAvail("someThread-123")
+      ).rejects.toThrowError(NotFoundError);
+    });
+
+    it("should not throw error if the searched thread is found", async () => {
+      // Arrange
+      await UsersTableTestHelper.addUser({ id: "user-123" });
+      await ThreadsTableTestHelper.addThread({ owner: "user-123" });
+      const threadRepositoryPostgres = new ThreadRepositoryPostgres(pool, {});
+
+      // Action & Assert
+      await expect(
+        threadRepositoryPostgres.checkThreadAvail("thread-123")
+      ).resolves.not.toThrow(NotFoundError);
     });
   });
 });
