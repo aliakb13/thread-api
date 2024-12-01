@@ -1,8 +1,10 @@
 const GetDetailThreadUseCase = require("../GetDetailThreadUseCase");
 const ThreadRepository = require("../../../Domains/threads/ThreadRepository");
 const CommentRepository = require("../../../Domains/comments/CommentRepository");
+const ReplyRepository = require("../../../Domains/replies/ReplyRepository");
 const Thread = require("../../../Domains/threads/entities/Thread");
 const Comment = require("../../../Domains/comments/entities/Comment");
+const Reply = require("../../../Domains/replies/entities/Reply");
 
 describe("GetDetailThreadUseCase", () => {
   it("should orchestrating the get detail thread correctly", async () => {
@@ -10,6 +12,8 @@ describe("GetDetailThreadUseCase", () => {
     const useCasePayload = {
       threadId: "thread-123",
     };
+
+    const commentId = "comment-123";
 
     const threadPayload = {
       id: "thread-123",
@@ -20,16 +24,35 @@ describe("GetDetailThreadUseCase", () => {
       comments: [],
     };
 
-    const commentPayload = [
+    const commentsPayload = [
       {
         id: "comment-123",
         username: "second user",
         date: {},
         content: "some content",
         is_deleted: false,
+        replies: [],
       },
       {
         id: "comment-345",
+        username: "third user",
+        date: {},
+        content: "some content",
+        is_deleted: true,
+        replies: [],
+      },
+    ];
+
+    const repliesPayload = [
+      {
+        id: "reply-123",
+        username: "second user",
+        date: {},
+        content: "some content",
+        is_deleted: false,
+      },
+      {
+        id: "reply-345",
         username: "third user",
         date: {},
         content: "some content",
@@ -38,10 +61,14 @@ describe("GetDetailThreadUseCase", () => {
     ];
 
     const mockThread = new Thread(threadPayload);
-    const mockComment = commentPayload.map((comment) => new Comment(comment));
+    const mockComment = commentsPayload.map((comment) =>
+      new Comment(comment).toJson()
+    );
+    const mockReply = repliesPayload.map((reply) => new Reply(reply).toJson());
 
     const mockThreadRepository = new ThreadRepository();
     const mockCommentRepository = new CommentRepository();
+    const mockReplyRepository = new ReplyRepository();
 
     mockThreadRepository.checkThreadAvail = jest
       .fn()
@@ -49,6 +76,9 @@ describe("GetDetailThreadUseCase", () => {
     mockCommentRepository.getCommentByThreadId = jest
       .fn()
       .mockImplementation(() => Promise.resolve(mockComment));
+    mockReplyRepository.getRepliesByCommentId = jest
+      .fn()
+      .mockImplementation(() => Promise.resolve(mockReply));
     mockThreadRepository.getThreadById = jest
       .fn()
       .mockImplementation(() => Promise.resolve(mockThread));
@@ -56,6 +86,7 @@ describe("GetDetailThreadUseCase", () => {
     const getDetailThreadUseCase = new GetDetailThreadUseCase({
       threadRepository: mockThreadRepository,
       commentRepository: mockCommentRepository,
+      replyRepository: mockReplyRepository,
     });
 
     // Action
@@ -63,13 +94,16 @@ describe("GetDetailThreadUseCase", () => {
     const thread = await getDetailThreadUseCase.execute(useCasePayload);
 
     // Assert
-
     expect(thread.comments.length).toEqual(2);
+    expect(thread.comments[0].replies).toHaveLength(2);
     expect(mockThreadRepository.checkThreadAvail).toHaveBeenCalledWith(
       useCasePayload.threadId
     );
     expect(mockCommentRepository.getCommentByThreadId).toHaveBeenCalledWith(
       useCasePayload.threadId
+    );
+    expect(mockReplyRepository.getRepliesByCommentId).toHaveBeenCalledWith(
+      commentId
     );
     expect(mockThreadRepository.getThreadById).toHaveBeenCalledWith(
       useCasePayload.threadId

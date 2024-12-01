@@ -8,10 +8,11 @@ class Comment {
     this.content = payload.is_deleted
       ? `**komentar telah dihapus**`
       : payload.content;
+    this.replies = payload.replies;
   }
 
-  _verifyPayload({ id, username, date, content }) {
-    if (!id || !username || !date || !content) {
+  _verifyPayload({ id, username, date, content, replies }) {
+    if (!id || !username || !date || !content || !replies) {
       throw new Error("COMMENT.NOT_CONTAIN_NEEDED_PROPERTY");
     }
 
@@ -19,7 +20,8 @@ class Comment {
       typeof id !== "string" ||
       typeof username !== "string" ||
       typeof date !== "object" ||
-      typeof content !== "string"
+      typeof content !== "string" ||
+      typeof replies !== "object"
     ) {
       throw new Error("COMMENT.NOT_MEET_DATA_TYPE_SPECIFICATION");
     }
@@ -31,6 +33,7 @@ class Comment {
       username: this.username,
       date: this.date,
       content: this.content,
+      replies: this.replies,
     };
   }
 }

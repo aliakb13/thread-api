@@ -3,6 +3,7 @@ const UsersTableTestHelper = require("../../../../tests/UsersTableTestHelper");
 const AuthenticationsTableTestHelper = require("../../../../tests/AuthenticationsTableTestHelper");
 const ThreadsTableTestHelper = require("../../../../tests/ThreadsTableTestHelper");
 const CommentTableTestHelper = require("../../../../tests/CommentsTableTestHelper");
+const RepliesTableTestHelper = require("../../../../tests/RepliesTableTestHelper");
 const createServer = require("../createServer");
 const container = require("../../container");
 const PasswordHash = require("../../../Applications/security/PasswordHash");
@@ -133,6 +134,20 @@ describe("/threads endpoint", () => {
         isDeleted: true,
       });
 
+      await RepliesTableTestHelper.addReply({
+        id: "reply-123",
+        commentId: "comment-123",
+        owner: "user-123",
+        date: new Date("2024-11-25"),
+      });
+      await RepliesTableTestHelper.addReply({
+        id: "reply-345",
+        commentId: "comment-345",
+        owner: "user-345",
+        date: new Date("2024-11-26"),
+        isDeleted: true,
+      });
+
       const server = await createServer(container);
 
       // Action
@@ -142,11 +157,31 @@ describe("/threads endpoint", () => {
       });
 
       // Assert
+      console.log(response);
       const responseJson = JSON.parse(response.payload);
+
+      //get the replies for testing
+      const repliesOne = responseJson.data.thread.comments[0].replies[0];
+      const repliesTwo = responseJson.data.thread.comments[1].replies[0];
+
       expect(response.statusCode).toEqual(200);
       expect(responseJson.status).toEqual("success");
       expect(responseJson.data.thread).toBeDefined();
       expect(responseJson.data.thread.comments).toHaveLength(2);
+
+      //replies 1
+      expect(responseJson.data.thread.comments[0].replies).toHaveLength(1);
+      expect(repliesOne.id).toEqual("reply-123");
+      expect(repliesOne.content).toEqual("some content for replies");
+      expect(repliesOne.date).toBeDefined();
+      expect(repliesOne.username).toEqual("first user");
+
+      //replies 2
+      expect(responseJson.data.thread.comments[1].replies).toHaveLength(1);
+      expect(repliesTwo.id).toEqual("reply-345");
+      expect(repliesTwo.content).toEqual("**balasan telah dihapus**");
+      expect(repliesTwo.date).toBeDefined();
+      expect(repliesTwo.username).toEqual("second user");
     });
 
     it("should response 404 when thread not found", async () => {

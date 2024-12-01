@@ -72,6 +72,7 @@ class ReplyRepositoryPostgres extends ReplyRepository {
     const result = await this._pool.query(query);
 
     const replies = result.rows.map((row) => new Reply(row).toJson());
+
     return replies;
   }
 }
