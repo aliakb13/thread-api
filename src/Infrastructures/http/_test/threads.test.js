@@ -157,7 +157,6 @@ describe("/threads endpoint", () => {
       });
 
       // Assert
-      console.log(response);
       const responseJson = JSON.parse(response.payload);
 
       //get the replies for testing
