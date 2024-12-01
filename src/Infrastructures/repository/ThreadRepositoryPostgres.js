@@ -22,7 +22,6 @@ class ThreadRepositoryPostgres extends ThreadRepository {
     };
 
     const result = await this._pool.query(query);
-    // console.log(result);
     return new CreatedThread({ ...result.rows[0] });
   }
 

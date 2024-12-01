@@ -51,6 +51,12 @@ DomainErrorTranslator._directories = {
   "DETAIL_THREAD_USE_CASE.NOT_MEET_DATA_TYPE_SPECIFICATION": new InvariantError(
     "threadId harus string saat melihat detail"
   ),
+  "CREATE_REPLY.NOT_CONTAIN_NEEDED_PROPERTY": new InvariantError(
+    "content harus dikirimkan ketika membuat reply baru"
+  ),
+  "CREATE_REPLY.NOT_MEET_DATA_TYPE_SPECIFICATION": new InvariantError(
+    "content harus berupa string ketika membuat reply baru!"
+  ),
 };
 
 module.exports = DomainErrorTranslator;

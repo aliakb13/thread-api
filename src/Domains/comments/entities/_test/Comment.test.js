@@ -22,6 +22,7 @@ describe("A Comment Object", () => {
       username: "user-123",
       date: "some date",
       content: "some content",
+      replies: [],
     };
 
     // Action & Assert
@@ -37,6 +38,7 @@ describe("A Comment Object", () => {
       username: "user-123",
       date: {},
       content: "some content",
+      replies: [],
     };
 
     // Action
