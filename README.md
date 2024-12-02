@@ -81,7 +81,7 @@ npm run start:dev (nodemon)
 #### - Create New Thread (Restrictred)
 
 ```http
-  POST /threads
+POST /threads
 ```
 
 ---
@@ -89,7 +89,7 @@ npm run start:dev (nodemon)
 #### - Get Detail Thread
 
 ```http
-  GET /threads/{threadId}
+GET /threads/{threadId}
 ```
 
 | Parameter  | Type     | Description                               |
@@ -103,7 +103,7 @@ npm run start:dev (nodemon)
 #### - Create New Comment (Restrictred)
 
 ```http
-  POST /threads/{threadId}/comments
+POST /threads/{threadId}/comments
 ```
 
 | Parameter  | Type     | Description                                            |
