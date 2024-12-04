@@ -43,9 +43,32 @@ describe("Reply object", () => {
     const reply = new Reply(payload);
 
     // Assert
+    expect(reply).toBeInstanceOf(Reply);
     expect(reply.id).toEqual(payload.id);
     expect(reply.content).toEqual(payload.content);
     expect(reply.date).toEqual(payload.date);
     expect(reply.content).toEqual(payload.content);
+    expect(reply.username).toEqual(payload.username);
+  });
+
+  it("should return plain object if toJson() called", () => {
+    // Arrange
+    const payload = {
+      id: "reply-123",
+      content: "some reply content",
+      date: new Date("2024-11-25"),
+      username: "ujang",
+    };
+
+    // Action
+    const reply = new Reply(payload).toJson();
+
+    // Assert
+    expect(reply).toStrictEqual({
+      id: "reply-123",
+      content: "some reply content",
+      date: new Date("2024-11-25"),
+      username: "ujang",
+    });
   });
 });
