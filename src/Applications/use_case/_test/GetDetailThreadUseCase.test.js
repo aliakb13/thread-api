@@ -2,9 +2,6 @@ const GetDetailThreadUseCase = require("../GetDetailThreadUseCase");
 const ThreadRepository = require("../../../Domains/threads/ThreadRepository");
 const CommentRepository = require("../../../Domains/comments/CommentRepository");
 const ReplyRepository = require("../../../Domains/replies/ReplyRepository");
-const Thread = require("../../../Domains/threads/entities/Thread");
-const Comment = require("../../../Domains/comments/entities/Comment");
-const Reply = require("../../../Domains/replies/entities/Reply");
 
 describe("GetDetailThreadUseCase", () => {
   it("should orchestrating the get detail thread correctly", async () => {
@@ -13,9 +10,7 @@ describe("GetDetailThreadUseCase", () => {
       threadId: "thread-123",
     };
 
-    const commentId = "comment-123";
-
-    const threadPayload = {
+    const mockThread = {
       id: "thread-123",
       title: "some title",
       body: "some body",
@@ -24,7 +19,7 @@ describe("GetDetailThreadUseCase", () => {
       comments: [],
     };
 
-    const commentsPayload = [
+    const mockComment = [
       {
         id: "comment-123",
         username: "second user",
@@ -43,7 +38,7 @@ describe("GetDetailThreadUseCase", () => {
       },
     ];
 
-    const repliesPayload = [
+    const mockReplies = [
       {
         id: "reply-123",
         username: "second user",
@@ -60,12 +55,6 @@ describe("GetDetailThreadUseCase", () => {
       },
     ];
 
-    const mockThread = new Thread(threadPayload);
-    const mockComment = commentsPayload.map((comment) =>
-      new Comment(comment).toJson()
-    );
-    const mockReply = repliesPayload.map((reply) => new Reply(reply).toJson());
-
     const mockThreadRepository = new ThreadRepository();
     const mockCommentRepository = new CommentRepository();
     const mockReplyRepository = new ReplyRepository();
@@ -78,7 +67,12 @@ describe("GetDetailThreadUseCase", () => {
       .mockImplementation(() => Promise.resolve(mockComment));
     mockReplyRepository.getRepliesByCommentId = jest
       .fn()
-      .mockImplementation(() => Promise.resolve(mockReply));
+      .mockImplementation((commentId) => {
+        if (commentId === "comment-123") {
+          return Promise.resolve(mockReplies);
+        }
+        return Promise.resolve([]);
+      });
     mockThreadRepository.getThreadById = jest
       .fn()
       .mockImplementation(() => Promise.resolve(mockThread));
@@ -94,8 +88,8 @@ describe("GetDetailThreadUseCase", () => {
     const thread = await getDetailThreadUseCase.execute(useCasePayload);
 
     // Assert
-    expect(thread.comments.length).toEqual(2);
     expect(thread.comments[0].replies).toHaveLength(2);
+    expect(thread.comments[1].replies).toHaveLength(0);
     expect(mockThreadRepository.checkThreadAvail).toHaveBeenCalledWith(
       useCasePayload.threadId
     );
@@ -103,17 +97,54 @@ describe("GetDetailThreadUseCase", () => {
       useCasePayload.threadId
     );
     expect(mockReplyRepository.getRepliesByCommentId).toHaveBeenCalledWith(
-      commentId
+      "comment-123"
+    );
+    expect(mockReplyRepository.getRepliesByCommentId).toHaveBeenCalledWith(
+      "comment-345"
     );
     expect(mockThreadRepository.getThreadById).toHaveBeenCalledWith(
       useCasePayload.threadId
     );
-    expect(thread).toStrictEqual(
-      new Thread({
-        ...mockThread,
-        comments: mockComment,
-      })
-    );
+    expect(thread).toEqual({
+      id: "thread-123",
+      title: "some title",
+      body: "some body",
+      date: {},
+      username: "first user",
+      comments: [
+        {
+          id: "comment-123",
+          username: "second user",
+          date: {},
+          content: "some content",
+          is_deleted: false,
+          replies: [
+            {
+              id: "reply-123",
+              username: "second user",
+              date: {},
+              content: "some content",
+              is_deleted: false,
+            },
+            {
+              id: "reply-345",
+              username: "third user",
+              date: {},
+              content: "some content",
+              is_deleted: true,
+            },
+          ],
+        },
+        {
+          id: "comment-345",
+          username: "third user",
+          date: {},
+          content: "some content",
+          is_deleted: true,
+          replies: [],
+        },
+      ],
+    });
   });
 
   it("should throw error if use case not contain threadId", async () => {

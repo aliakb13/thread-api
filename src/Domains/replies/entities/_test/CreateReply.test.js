@@ -40,11 +40,12 @@ describe("A CreateReply entities", () => {
     };
 
     // Action
-    const { content, commentId, userId } = new CreateReply(payload);
+    const { content, commentId, userId, threadId } = new CreateReply(payload);
 
     // Assert
     expect(content).toEqual(payload.content);
     expect(commentId).toEqual(payload.commentId);
     expect(userId).toEqual(payload.userId);
+    expect(threadId).toEqual(payload.threadId);
   });
 });

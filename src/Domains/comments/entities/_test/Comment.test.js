@@ -45,9 +45,34 @@ describe("A Comment Object", () => {
     const comment = new Comment(payload);
 
     // Assert
+    expect(comment).toBeInstanceOf(Comment);
     expect(comment.id).toEqual(payload.id);
     expect(comment.username).toEqual(payload.username);
     expect(comment.date).toEqual(payload.date);
     expect(comment.content).toEqual(payload.content);
+    expect(comment.replies).toEqual(payload.replies);
+  });
+
+  it("should convert to plain object if toJson() called", () => {
+    // Arrange
+    const payload = {
+      id: "comment-123",
+      username: "user-123",
+      date: {},
+      content: "some content",
+      replies: [],
+    };
+
+    // Action
+    const comment = new Comment(payload).toJson();
+
+    // Assert
+    expect(comment).toStrictEqual({
+      id: "comment-123",
+      username: "user-123",
+      date: {},
+      content: "some content",
+      replies: [],
+    });
   });
 });
