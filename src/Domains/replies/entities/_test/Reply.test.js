@@ -30,6 +30,46 @@ describe("Reply object", () => {
     );
   });
 
+  it("should contain actual value if is_deleted property false", () => {
+    // Arrange
+    const payload = {
+      id: "reply-123",
+      content: "not deleted content",
+      date: new Date(),
+      username: "ujang",
+      is_deleted: false,
+    };
+
+    // Action
+    const reply = new Reply(payload);
+
+    // Assert
+    expect(reply.id).toEqual(payload.id);
+    expect(reply.content).toEqual(payload.content);
+    expect(reply.date).toEqual(payload.date);
+    expect(reply.username).toEqual(payload.username);
+  });
+
+  it("should contain **balasan telah dihapus** value if is_deleted property true", () => {
+    // Arrange
+    const payload = {
+      id: "reply-123",
+      content: "will be deleted",
+      date: new Date(),
+      username: "ujang",
+      is_deleted: true,
+    };
+
+    // Action
+    const reply = new Reply(payload);
+
+    // Assert
+    expect(reply.id).toEqual(payload.id);
+    expect(reply.content).toEqual("**balasan telah dihapus**");
+    expect(reply.date).toEqual(payload.date);
+    expect(reply.username).toEqual(payload.username);
+  });
+
   it("should create Reply object correctly", () => {
     // Arrange
     const payload = {

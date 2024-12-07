@@ -67,12 +67,7 @@ describe("GetDetailThreadUseCase", () => {
       .mockImplementation(() => Promise.resolve(mockComment));
     mockReplyRepository.getRepliesByCommentId = jest
       .fn()
-      .mockImplementation((commentId) => {
-        if (commentId === "comment-123") {
-          return Promise.resolve(mockReplies);
-        }
-        return Promise.resolve([]);
-      });
+      .mockImplementation(() => Promise.resolve(mockReplies));
     mockThreadRepository.getThreadById = jest
       .fn()
       .mockImplementation(() => Promise.resolve(mockThread));
@@ -89,7 +84,7 @@ describe("GetDetailThreadUseCase", () => {
 
     // Assert
     expect(thread.comments[0].replies).toHaveLength(2);
-    expect(thread.comments[1].replies).toHaveLength(0);
+    expect(thread.comments[1].replies).toHaveLength(2);
     expect(mockThreadRepository.checkThreadAvail).toHaveBeenCalledWith(
       useCasePayload.threadId
     );
@@ -141,7 +136,22 @@ describe("GetDetailThreadUseCase", () => {
           date: {},
           content: "some content",
           is_deleted: true,
-          replies: [],
+          replies: [
+            {
+              id: "reply-123",
+              username: "second user",
+              date: {},
+              content: "some content",
+              is_deleted: false,
+            },
+            {
+              id: "reply-345",
+              username: "third user",
+              date: {},
+              content: "some content",
+              is_deleted: true,
+            },
+          ],
         },
       ],
     });
