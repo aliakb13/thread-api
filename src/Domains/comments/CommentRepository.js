@@ -1,21 +1,25 @@
-class CommentRepository {
-  constructor() {}
+/* eslint-disable no-unused-vars */
 
+class CommentRepository {
   // payload content, threadId, userId
   async addComment(createComment) {
-    throw new Error("COMMENT_REPOSITORY.METHOD_NOT_IMPLEMENTED");
+    throw new Error('COMMENT_REPOSITORY.METHOD_NOT_IMPLEMENTED');
   }
+
   async deleteCommentById(commentId) {
-    throw new Error("COMMENT_REPOSITORY.METHOD_NOT_IMPLEMENTED");
+    throw new Error('COMMENT_REPOSITORY.METHOD_NOT_IMPLEMENTED');
   }
+
   async checkCommentAvail(commentId) {
-    throw new Error("COMMENT_REPOSITORY.METHOD_NOT_IMPLEMENTED");
+    throw new Error('COMMENT_REPOSITORY.METHOD_NOT_IMPLEMENTED');
   }
+
   async checkIsCommentOwner(commentId, userId) {
-    throw new Error("COMMENT_REPOSITORY.METHOD_NOT_IMPLEMENTED");
+    throw new Error('COMMENT_REPOSITORY.METHOD_NOT_IMPLEMENTED');
   }
+
   async getCommentByThreadId(threadId) {
-    throw new Error("COMMENT_REPOSITORY.METHOD_NOT_IMPLEMENTED");
+    throw new Error('COMMENT_REPOSITORY.METHOD_NOT_IMPLEMENTED');
   }
 }
 

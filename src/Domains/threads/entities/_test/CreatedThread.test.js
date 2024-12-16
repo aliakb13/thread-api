@@ -1,39 +1,39 @@
-const CreatedThread = require("../CreatedThread");
+const CreatedThread = require('../CreatedThread');
 
-describe("A CreatedThread entities", () => {
-  it("should throw error when payload not contain needed property", () => {
+describe('A CreatedThread entities', () => {
+  it('should throw error when payload not contain needed property', () => {
     // Arrange
     const payload = {
-      id: "thread-123",
-      title: "some title",
+      id: 'thread-123',
+      title: 'some title',
     };
 
     // Action & Assert
     expect(() => new CreatedThread(payload)).toThrowError(
-      "CREATED_THREAD.NOT_CONTAIN_NEEDED_PROPERTY"
+      'CREATED_THREAD.NOT_CONTAIN_NEEDED_PROPERTY',
     );
   });
 
-  it("should throw error when payload did not meet data type specification", () => {
+  it('should throw error when payload did not meet data type specification', () => {
     // Arrange
     const payload = {
-      id: "thread-123",
+      id: 'thread-123',
       title: 213,
-      owner: "user-123",
+      owner: 'user-123',
     };
 
     // Action & Assert
     expect(() => new CreatedThread(payload)).toThrowError(
-      "CREATED_THREAD.NOT_MEET_DATA_TYPE_SPECIFICATION"
+      'CREATED_THREAD.NOT_MEET_DATA_TYPE_SPECIFICATION',
     );
   });
 
-  it("should create CreatedThread object correctly", () => {
+  it('should create CreatedThread object correctly', () => {
     // Arrange
     const payload = {
-      id: "thread-123",
-      title: "some title",
-      owner: "user-123",
+      id: 'thread-123',
+      title: 'some title',
+      owner: 'user-123',
     };
 
     // Action

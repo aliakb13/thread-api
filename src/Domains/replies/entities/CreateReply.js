@@ -8,18 +8,20 @@ class CreateReply {
     this.threadId = payload.threadId;
   }
 
-  _verifyPayload({ content, commentId, userId, threadId }) {
+  _verifyPayload({
+    content, commentId, userId, threadId,
+  }) {
     if (!content || !commentId || !userId || !threadId) {
-      throw new Error("CREATE_REPLY.NOT_CONTAIN_NEEDED_PROPERTY");
+      throw new Error('CREATE_REPLY.NOT_CONTAIN_NEEDED_PROPERTY');
     }
 
     if (
-      typeof content !== "string" ||
-      typeof commentId !== "string" ||
-      typeof userId !== "string" ||
-      typeof threadId !== "string"
+      typeof content !== 'string'
+      || typeof commentId !== 'string'
+      || typeof userId !== 'string'
+      || typeof threadId !== 'string'
     ) {
-      throw new Error("CREATE_REPLY.NOT_MEET_DATA_TYPE_SPECIFICATION");
+      throw new Error('CREATE_REPLY.NOT_MEET_DATA_TYPE_SPECIFICATION');
     }
   }
 }

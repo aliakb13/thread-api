@@ -1,4 +1,4 @@
-const DeleteComment = require("../../Domains/comments/entities/DeleteComment");
+const DeleteComment = require('../../Domains/comments/entities/DeleteComment');
 
 class DeleteCommentUseCase {
   constructor({ userRepository, threadRepository, commentRepository }) {
@@ -14,7 +14,7 @@ class DeleteCommentUseCase {
     await this._commentRepository.checkCommentAvail(deleteComment.commentId);
     await this._commentRepository.checkIsCommentOwner(
       deleteComment.commentId,
-      deleteComment.userId
+      deleteComment.userId,
     );
     await this._commentRepository.deleteCommentById(deleteComment.commentId);
   }

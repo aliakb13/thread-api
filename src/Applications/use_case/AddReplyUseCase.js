@@ -1,4 +1,4 @@
-const CreateReply = require("../../Domains/replies/entities/CreateReply");
+const CreateReply = require('../../Domains/replies/entities/CreateReply');
 
 class AddReplyUseCase {
   constructor({ threadRepository, commentRepository, replyRepository }) {
@@ -11,7 +11,7 @@ class AddReplyUseCase {
     const createReply = new CreateReply(payload);
     await this._threadRepository.checkThreadAvail(createReply.threadId);
     await this._commentRepository.checkCommentAvail(createReply.commentId);
-    return await this._replyRepository.addReply(createReply);
+    return this._replyRepository.addReply(createReply);
   }
 }
 

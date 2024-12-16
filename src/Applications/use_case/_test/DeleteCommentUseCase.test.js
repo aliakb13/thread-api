@@ -1,16 +1,16 @@
-const DeleteCommentUseCase = require("../DeleteCommentUseCase");
-const DeleteComment = require("../../../Domains/comments/entities/DeleteComment");
-const UserRepository = require("../../../Domains/users/UserRepository");
-const ThreadRepository = require("../../../Domains/threads/ThreadRepository");
-const CommentRepository = require("../../../Domains/comments/CommentRepository");
+const DeleteCommentUseCase = require('../DeleteCommentUseCase');
+const DeleteComment = require('../../../Domains/comments/entities/DeleteComment');
+const UserRepository = require('../../../Domains/users/UserRepository');
+const ThreadRepository = require('../../../Domains/threads/ThreadRepository');
+const CommentRepository = require('../../../Domains/comments/CommentRepository');
 
-describe("DeleteCommentUseCase", () => {
-  it("should orchestrating the delete thread correctly", async () => {
+describe('DeleteCommentUseCase', () => {
+  it('should orchestrating the delete thread correctly', async () => {
     // Arrange
     const userPayload = new DeleteComment({
-      threadId: "thread-123",
-      userId: "user-123",
-      commentId: "comment-123",
+      threadId: 'thread-123',
+      userId: 'user-123',
+      commentId: 'comment-123',
     });
 
     const mockUserRepository = new UserRepository();
@@ -45,20 +45,20 @@ describe("DeleteCommentUseCase", () => {
 
     // Assert
     expect(mockUserRepository.checkUserAvail).toHaveBeenCalledWith(
-      userPayload.userId
+      userPayload.userId,
     );
     expect(mockThreadRepository.checkThreadAvail).toHaveBeenCalledWith(
-      userPayload.threadId
+      userPayload.threadId,
     );
     expect(mockCommentRepository.checkCommentAvail).toHaveBeenCalledWith(
-      userPayload.commentId
+      userPayload.commentId,
     );
     expect(mockCommentRepository.checkIsCommentOwner).toHaveBeenCalledWith(
       userPayload.commentId,
-      userPayload.userId
+      userPayload.userId,
     );
     expect(mockCommentRepository.deleteCommentById).toHaveBeenCalledWith(
-      userPayload.commentId
+      userPayload.commentId,
     );
   });
 });

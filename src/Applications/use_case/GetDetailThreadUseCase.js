@@ -1,3 +1,6 @@
+/* eslint-disable no-await-in-loop */
+/* eslint-disable no-restricted-syntax */
+
 class GetDetailThreadUseCase {
   constructor({ threadRepository, commentRepository, replyRepository }) {
     this._threadRepository = threadRepository;
@@ -12,11 +15,11 @@ class GetDetailThreadUseCase {
 
     await this._threadRepository.checkThreadAvail(threadId);
     const comments = await this._commentRepository.getCommentByThreadId(
-      threadId
+      threadId,
     );
     for (const comment of comments) {
       const replies = await this._replyRepository.getRepliesByCommentId(
-        comment.id
+        comment.id,
       );
       comment.replies = replies;
     }
@@ -28,12 +31,12 @@ class GetDetailThreadUseCase {
 
   _verifyPayload({ threadId }) {
     if (!threadId) {
-      throw new Error("DETAIL_THREAD_USE_CASE.NOT_CONTAIN_THREAD_ID");
+      throw new Error('DETAIL_THREAD_USE_CASE.NOT_CONTAIN_THREAD_ID');
     }
 
-    if (typeof threadId !== "string") {
+    if (typeof threadId !== 'string') {
       throw new Error(
-        "DETAIL_THREAD_USE_CASE.NOT_MEET_DATA_TYPE_SPECIFICATION"
+        'DETAIL_THREAD_USE_CASE.NOT_MEET_DATA_TYPE_SPECIFICATION',
       );
     }
   }

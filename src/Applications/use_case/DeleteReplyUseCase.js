@@ -1,4 +1,4 @@
-const DeleteReply = require("../../Domains/replies/entities/DeleteReply");
+const DeleteReply = require('../../Domains/replies/entities/DeleteReply');
 
 class DeleteReplyUseCase {
   constructor({ threadRepository, commentRepository, replyRepository }) {
@@ -14,7 +14,7 @@ class DeleteReplyUseCase {
     await this._replyRepository.checkReplyAvail(deleteReply.replyId);
     await this._replyRepository.checkIsReplyOwner(
       deleteReply.replyId,
-      deleteReply.userId
+      deleteReply.userId,
     );
     await this._replyRepository.deleteReplyById(deleteReply.replyId);
   }

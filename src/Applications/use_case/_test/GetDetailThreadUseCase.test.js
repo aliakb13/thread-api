@@ -1,41 +1,41 @@
-const GetDetailThreadUseCase = require("../GetDetailThreadUseCase");
-const ThreadRepository = require("../../../Domains/threads/ThreadRepository");
-const CommentRepository = require("../../../Domains/comments/CommentRepository");
-const ReplyRepository = require("../../../Domains/replies/ReplyRepository");
-const Thread = require("../../../Domains/threads/entities/Thread");
-const Comment = require("../../../Domains/comments/entities/Comment");
-const Reply = require("../../../Domains/replies/entities/Reply");
+const GetDetailThreadUseCase = require('../GetDetailThreadUseCase');
+const ThreadRepository = require('../../../Domains/threads/ThreadRepository');
+const CommentRepository = require('../../../Domains/comments/CommentRepository');
+const ReplyRepository = require('../../../Domains/replies/ReplyRepository');
+const Thread = require('../../../Domains/threads/entities/Thread');
+const Comment = require('../../../Domains/comments/entities/Comment');
+const Reply = require('../../../Domains/replies/entities/Reply');
 
-describe("GetDetailThreadUseCase", () => {
-  it("should orchestrating the get detail thread correctly", async () => {
+describe('GetDetailThreadUseCase', () => {
+  it('should orchestrating the get detail thread correctly', async () => {
     // Arrange
     const useCasePayload = {
-      threadId: "thread-123",
+      threadId: 'thread-123',
     };
 
     const threadPayload = {
-      id: "thread-123",
-      title: "some title",
-      body: "some body",
+      id: 'thread-123',
+      title: 'some title',
+      body: 'some body',
       date: {},
-      username: "first user",
+      username: 'first user',
       comments: [],
     };
 
     const commentsPayload = [
       {
-        id: "comment-123",
-        username: "second user",
+        id: 'comment-123',
+        username: 'second user',
         date: {},
-        content: "some content",
+        content: 'some content',
         is_deleted: false,
         replies: [],
       },
       {
-        id: "comment-345",
-        username: "third user",
+        id: 'comment-345',
+        username: 'third user',
         date: {},
-        content: "some content",
+        content: 'some content',
         is_deleted: true,
         replies: [],
       },
@@ -43,17 +43,17 @@ describe("GetDetailThreadUseCase", () => {
 
     const repliesPayload = [
       {
-        id: "reply-123",
-        username: "second user",
+        id: 'reply-123',
+        username: 'second user',
         date: {},
-        content: "some content",
+        content: 'some content',
         is_deleted: false,
       },
       {
-        id: "reply-345",
-        username: "third user",
+        id: 'reply-345',
+        username: 'third user',
         date: {},
-        content: "some content",
+        content: 'some content',
         is_deleted: true,
       },
     ];
@@ -94,45 +94,44 @@ describe("GetDetailThreadUseCase", () => {
     expect(thread.comments[0].replies).toHaveLength(2);
     expect(thread.comments[1].replies).toHaveLength(2);
     expect(mockThreadRepository.checkThreadAvail).toHaveBeenCalledWith(
-      useCasePayload.threadId
+      useCasePayload.threadId,
     );
     expect(mockCommentRepository.getCommentByThreadId).toHaveBeenCalledWith(
-      useCasePayload.threadId
+      useCasePayload.threadId,
     );
     expect(mockReplyRepository.getRepliesByCommentId).toHaveBeenCalledWith(
-      "comment-123"
+      'comment-123',
     );
     expect(mockReplyRepository.getRepliesByCommentId).toHaveBeenCalledWith(
-      "comment-345"
+      'comment-345',
     );
     expect(mockThreadRepository.getThreadById).toHaveBeenCalledWith(
-      useCasePayload.threadId
+      useCasePayload.threadId,
     );
     expect(thread).toStrictEqual(
       new Thread({
         ...threadPayload,
         comments: commentsPayload.map(
-          (comment) =>
-            new Comment({
-              ...comment,
-              replies: repliesPayload.map((reply) => new Reply(reply)),
-            })
+          (comment) => new Comment({
+            ...comment,
+            replies: repliesPayload.map((reply) => new Reply(reply)),
+          }),
         ),
-      })
+      }),
     );
   });
 
-  it("should throw error if use case not contain threadId", async () => {
+  it('should throw error if use case not contain threadId', async () => {
     // Arrange
     const getDetailThreadUseCase = new GetDetailThreadUseCase({}, {});
 
     // Action & Assert
     await expect(getDetailThreadUseCase.execute({})).rejects.toThrowError(
-      "DETAIL_THREAD_USE_CASE.NOT_CONTAIN_THREAD_ID"
+      'DETAIL_THREAD_USE_CASE.NOT_CONTAIN_THREAD_ID',
     );
   });
 
-  it("should throw error if thread id is not string", async () => {
+  it('should throw error if thread id is not string', async () => {
     // Arrange
     const useCasePayload = {
       threadId: 123,
@@ -141,9 +140,9 @@ describe("GetDetailThreadUseCase", () => {
 
     // Action & Assert
     await expect(
-      getDetailThreadUseCase.execute(useCasePayload)
+      getDetailThreadUseCase.execute(useCasePayload),
     ).rejects.toThrowError(
-      "DETAIL_THREAD_USE_CASE.NOT_MEET_DATA_TYPE_SPECIFICATION"
+      'DETAIL_THREAD_USE_CASE.NOT_MEET_DATA_TYPE_SPECIFICATION',
     );
   });
 });

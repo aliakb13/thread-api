@@ -1,15 +1,15 @@
 const routes = (handler) => [
   {
-    method: "POST",
-    path: "/threads",
+    method: 'POST',
+    path: '/threads',
     handler: handler.postThreadHandler,
     options: {
-      auth: "forumapiauth_jwt",
+      auth: 'forumapiauth_jwt',
     },
   },
   {
-    method: "GET",
-    path: "/threads/{threadId}",
+    method: 'GET',
+    path: '/threads/{threadId}',
     handler: handler.getDetailThreadHandler,
   },
 ];

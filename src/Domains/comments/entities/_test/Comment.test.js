@@ -1,43 +1,43 @@
-const Comment = require("../Comment");
+const Comment = require('../Comment');
 
-describe("A Comment Object", () => {
-  it("should throw error when payload not contain needed property", () => {
+describe('A Comment Object', () => {
+  it('should throw error when payload not contain needed property', () => {
     // Arrange
     const payload = {
-      id: "comment-123",
-      username: "user-123",
+      id: 'comment-123',
+      username: 'user-123',
       date: {},
     };
 
     // Action & Assert
     expect(() => new Comment(payload)).toThrowError(
-      "COMMENT.NOT_CONTAIN_NEEDED_PROPERTY"
+      'COMMENT.NOT_CONTAIN_NEEDED_PROPERTY',
     );
   });
 
-  it("should throw error when payload not meet data type specification", () => {
+  it('should throw error when payload not meet data type specification', () => {
     // Arrange
     const payload = {
-      id: "comment-123",
-      username: "user-123",
-      date: "some date",
-      content: "some content",
+      id: 'comment-123',
+      username: 'user-123',
+      date: 'some date',
+      content: 'some content',
       replies: [],
     };
 
     // Action & Assert
     expect(() => new Comment(payload)).toThrowError(
-      "COMMENT.NOT_MEET_DATA_TYPE_SPECIFICATION"
+      'COMMENT.NOT_MEET_DATA_TYPE_SPECIFICATION',
     );
   });
 
-  it("should contain actual value if is_deleted property false", () => {
+  it('should contain actual value if is_deleted property false', () => {
     // Arrange
     const payload = {
-      id: "comment-123",
-      username: "user-123",
+      id: 'comment-123',
+      username: 'user-123',
       date: {},
-      content: "not deleted content",
+      content: 'not deleted content',
       replies: [],
       is_deleted: false,
     };
@@ -53,13 +53,13 @@ describe("A Comment Object", () => {
     expect(comment.replies).toEqual(payload.replies);
   });
 
-  it("should contain **komentar telah dihapus** value if is_deleted property true", () => {
+  it('should contain **komentar telah dihapus** value if is_deleted property true', () => {
     // Arrange
     const payload = {
-      id: "comment-123",
-      username: "user-123",
+      id: 'comment-123',
+      username: 'user-123',
       date: {},
-      content: "will be deleted",
+      content: 'will be deleted',
       replies: [],
       is_deleted: true,
     };
@@ -71,17 +71,17 @@ describe("A Comment Object", () => {
     expect(comment.id).toEqual(payload.id);
     expect(comment.username).toEqual(payload.username);
     expect(comment.date).toEqual(payload.date);
-    expect(comment.content).toEqual("**komentar telah dihapus**");
+    expect(comment.content).toEqual('**komentar telah dihapus**');
     expect(comment.replies).toEqual(payload.replies);
   });
 
-  it("should create Comment object correctly", () => {
+  it('should create Comment object correctly', () => {
     // Arrange
     const payload = {
-      id: "comment-123",
-      username: "user-123",
+      id: 'comment-123',
+      username: 'user-123',
       date: {},
-      content: "some content",
+      content: 'some content',
       replies: [],
     };
 
@@ -97,13 +97,13 @@ describe("A Comment Object", () => {
     expect(comment.replies).toEqual(payload.replies);
   });
 
-  it("should convert to plain object if toJson() called", () => {
+  it('should convert to plain object if toJson() called', () => {
     // Arrange
     const payload = {
-      id: "comment-123",
-      username: "user-123",
+      id: 'comment-123',
+      username: 'user-123',
       date: {},
-      content: "some content",
+      content: 'some content',
       replies: [],
     };
 
@@ -112,10 +112,10 @@ describe("A Comment Object", () => {
 
     // Assert
     expect(comment).toStrictEqual({
-      id: "comment-123",
-      username: "user-123",
+      id: 'comment-123',
+      username: 'user-123',
       date: {},
-      content: "some content",
+      content: 'some content',
       replies: [],
     });
   });

@@ -8,18 +8,20 @@ class DeleteReply {
     this.userId = payload.userId;
   }
 
-  _verifyPayload({ threadId, commentId, replyId, userId }) {
+  _verifyPayload({
+    threadId, commentId, replyId, userId,
+  }) {
     if (!threadId || !commentId || !replyId || !userId) {
-      throw new Error("DELETE_REPLY.NOT_CONTAIN_NEEDED_PROPERTY");
+      throw new Error('DELETE_REPLY.NOT_CONTAIN_NEEDED_PROPERTY');
     }
 
     if (
-      typeof threadId !== "string" ||
-      typeof commentId !== "string" ||
-      typeof replyId !== "string" ||
-      typeof userId !== "string"
+      typeof threadId !== 'string'
+      || typeof commentId !== 'string'
+      || typeof replyId !== 'string'
+      || typeof userId !== 'string'
     ) {
-      throw new Error("DELETE_REPLY.NOT_MEET_DATA_TYPE_SPECIFICATION");
+      throw new Error('DELETE_REPLY.NOT_MEET_DATA_TYPE_SPECIFICATION');
     }
   }
 }
