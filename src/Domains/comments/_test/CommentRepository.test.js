@@ -1,6 +1,6 @@
 const CommentRepository = require('../CommentRepository');
 
-describe('ommentRepository interface', () => {
+describe('CommentRepository interface', () => {
   it('should throw error when invoke abstract behaviour', async () => {
     // Arrange
     const commentRepository = new CommentRepository();
