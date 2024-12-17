@@ -106,7 +106,7 @@ class CommentRepositoryPostgres extends CommentRepository {
 
   async countLike(commentId) {
     const query = {
-      text: 'SELECT COUNT(user_id) FROM likes WHERE thread_id = $1 AND comment_id = $2',
+      text: 'SELECT COUNT(user_id) FROM likes WHERE comment_id = $1',
       values: [commentId],
     };
 

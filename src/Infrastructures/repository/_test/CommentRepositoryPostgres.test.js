@@ -18,6 +18,7 @@ describe('CommentRepositoryPostgres', () => {
     await UsersTableTestHelper.cleanTable();
     await ThreadsTableTestHelper.cleanTable();
     await CommentsTableTestHelper.cleanTable();
+    await LikesTableTestHelper.cleanTable();
   });
 
   describe('addComment function', () => {
@@ -296,6 +297,9 @@ describe('CommentRepositoryPostgres', () => {
 
     it('should return 1 if searched like is found or exist', async () => {
       // Arrange
+      await UsersTableTestHelper.addUser({});
+      await ThreadsTableTestHelper.addThread({});
+      await CommentsTableTestHelper.addComment({ owner: 'user-123' });
       await LikesTableTestHelper.addLike({});
       const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {});
 
@@ -310,17 +314,15 @@ describe('CommentRepositoryPostgres', () => {
   describe('addLike function', () => {
     it('should persist added comment and return added comment correctly', async () => {
       // Arrange
-      const userLike = {
-        userId: 'user-123',
-        threadId: 'thread-123',
-        commentId: 'comment-123',
-      };
+      await UsersTableTestHelper.addUser({});
+      await ThreadsTableTestHelper.addThread({});
+      await CommentsTableTestHelper.addComment({ owner: 'user-123' });
 
       const fakeIdGenerator = () => '123';
       const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, fakeIdGenerator);
 
       // Action
-      await commentRepositoryPostgres.addLike(userLike);
+      await commentRepositoryPostgres.addLike('user-123', 'comment-123');
 
       // Assert
       const like = await LikesTableTestHelper.findLikeById('like-123');
@@ -331,6 +333,9 @@ describe('CommentRepositoryPostgres', () => {
   describe('deleteLike function', () => {
     it('should delete like properly', async () => {
       // Arrange
+      await UsersTableTestHelper.addUser({});
+      await ThreadsTableTestHelper.addThread({});
+      await CommentsTableTestHelper.addComment({ owner: 'user-123' });
       await LikesTableTestHelper.addLike({});
       const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {});
 
@@ -346,6 +351,10 @@ describe('CommentRepositoryPostgres', () => {
   describe('countLike function', () => {
     it('should return a correct number for count comment like', async () => {
       // Arrange
+      await UsersTableTestHelper.addUser({ id: 'user-123', username: 'first user' });
+      await UsersTableTestHelper.addUser({ id: 'user-345', username: 'second user' });
+      await ThreadsTableTestHelper.addThread({});
+      await CommentsTableTestHelper.addComment({ owner: 'user-123' });
       await LikesTableTestHelper.addLike({ id: 'like-123', userId: 'user-123' });
       await LikesTableTestHelper.addLike({ id: 'like-345', userId: 'user-345' });
 
