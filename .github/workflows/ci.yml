@@ -17,9 +17,9 @@ jobs:
       postgres:
         image: postgres
         env:
-          POSTGRES_USER: ${{ env.PGUSER }}
-          POSTGRES_PASSWORD: ${{ env.PGPASSWORD }}
-          POSTGRES_DB: ${{ env.PGDATABASE }}
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: tercespassword123
+          POSTGRES_DB: forumapi_test
 
         options: >-
           --health-cmd pg_isready
