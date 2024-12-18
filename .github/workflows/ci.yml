@@ -3,7 +3,7 @@ name: Continuous Integration
 on:
   pull_request:
     branches:
-      - master
+      - main
 
 jobs:
   test:
@@ -48,7 +48,7 @@ jobs:
           PGPORT: ${{ secrets.PGPORT }}
           PGUSER: ${{ secrets.PGUSER }}
           PGPASSWORD: ${{ secrets.PGPASSWORD }}
-          PGDATABASE: ${{ secret.PGDATABASE }}
+          PGDATABASE: ${{ secrets.PGDATABASE }}
           ACCESS_TOKEN_KEY: ${{ secrets.ACCESS_TOKEN_KEY }}
           REFRESH_TOKEN_KEY: ${{ secrets.REFRESH_TOKEN_KEY }}
           ACCESS_TOKEN_AGE: ${{ secrets.ACCESS_TOKEN_AGE }}
