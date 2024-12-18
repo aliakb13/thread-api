@@ -9,6 +9,7 @@ class Comment {
       ? '**komentar telah dihapus**'
       : payload.content;
     this.replies = payload.replies;
+    this.likeCount = 0;
   }
 
   _verifyPayload({
@@ -36,6 +37,7 @@ class Comment {
       date: this.date,
       content: this.content,
       replies: this.replies,
+      likeCount: this.likeCount,
     };
   }
 }

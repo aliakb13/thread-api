@@ -76,6 +76,7 @@ describe('GetDetailThreadUseCase', () => {
     mockReplyRepository.getRepliesByCommentId = jest
       .fn()
       .mockImplementation(() => Promise.resolve(mockReplies));
+    mockCommentRepository.countLike = jest.fn().mockImplementation(() => Promise.resolve(0));
     mockThreadRepository.getThreadById = jest
       .fn()
       .mockImplementation(() => Promise.resolve(mockThread));
@@ -108,6 +109,7 @@ describe('GetDetailThreadUseCase', () => {
     expect(mockThreadRepository.getThreadById).toHaveBeenCalledWith(
       useCasePayload.threadId,
     );
+
     expect(thread).toStrictEqual(
       new Thread({
         ...threadPayload,

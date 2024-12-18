@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 /* eslint-disable no-await-in-loop */
 /* eslint-disable no-restricted-syntax */
 
@@ -22,7 +23,26 @@ class GetDetailThreadUseCase {
         comment.id,
       );
       comment.replies = replies;
+      comment.likeCount = await this._commentRepository.countLike(comment.id);
     }
+
+    // const commentsWithDetails = await Promise.all(
+    //   comments.map(async (comment) => {
+    //     const replies = await this._replyRepository.getRepliesByCommentId(comment.id);
+    //     const likeCount = await this._commentRepository.countLike(comment.id);
+    //     return {
+    //       ...comment,
+    //       replies,
+    //       likeCount,
+    //     };
+    //   }),
+    // );
+
+    // // Jika ingin mengubah objek `comments` asli:
+    // comments.forEach((comment, index) => {
+    //   comment.replies = commentsWithDetails[index].replies;
+    //   comment.likeCount = commentsWithDetails[index].likeCount;
+    // });
 
     const thread = await this._threadRepository.getThreadById(threadId);
     thread.comments = comments;

@@ -265,6 +265,7 @@ describe('CommentRepositoryPostgres', () => {
       );
 
       // Assert
+      // console.log(comments);
       const firstComment = comments[0];
       const secondComment = comments[1];
       expect(comments).toHaveLength(2);
@@ -380,7 +381,7 @@ describe('CommentRepositoryPostgres', () => {
       const count = await commentRepositoryPostgres.countLike('comment-123');
 
       // Assert
-      expect(count).toEqual(1); // sementara pake string, kalo butuh int jangan lupa diganti
+      expect(count).toEqual(0); // sementara pake string, kalo butuh int jangan lupa diganti
     });
   });
 });

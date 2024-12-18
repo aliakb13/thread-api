@@ -4,6 +4,7 @@ const AuthenticationsTableTestHelper = require('../../../../tests/Authentication
 const ThreadsTableTestHelper = require('../../../../tests/ThreadsTableTestHelper');
 const CommentTableTestHelper = require('../../../../tests/CommentsTableTestHelper');
 const RepliesTableTestHelper = require('../../../../tests/RepliesTableTestHelper');
+const LikesTableTestHelper = require('../../../../tests/LikesTableTestHelper');
 const createServer = require('../createServer');
 const container = require('../../container');
 const PasswordHash = require('../../../Applications/security/PasswordHash');
@@ -133,6 +134,7 @@ describe('/threads endpoint', () => {
         owner: 'user-345',
         isDeleted: true,
       });
+      await LikesTableTestHelper.addLike({});
 
       await RepliesTableTestHelper.addReply({
         id: 'reply-123',
@@ -167,6 +169,7 @@ describe('/threads endpoint', () => {
       expect(responseJson.status).toEqual('success');
       expect(responseJson.data.thread).toBeDefined();
       expect(responseJson.data.thread.comments).toHaveLength(2);
+      expect(responseJson.data.thread.comments[0].likeCount).toEqual(1);
 
       // replies 1
       expect(responseJson.data.thread.comments[0].replies).toHaveLength(1);
