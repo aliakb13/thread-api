@@ -54,7 +54,6 @@ describe('/likes endpoint', () => {
       });
 
       // Assert
-      // console.log(response);
       const responseJson = JSON.parse(response.payload);
       expect(response.statusCode).toEqual(200);
       expect(responseJson.status).toEqual('success');
@@ -98,7 +97,6 @@ describe('/likes endpoint', () => {
       });
 
       // Assert
-      // console.log(response);
       const responseJson = JSON.parse(response.payload);
       expect(response.statusCode).toEqual(200);
       expect(responseJson.status).toEqual('success');

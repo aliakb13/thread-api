@@ -361,10 +361,26 @@ describe('CommentRepositoryPostgres', () => {
       const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {});
 
       // Action
-      const { count } = await commentRepositoryPostgres.countLike('comment-123');
+      const count = await commentRepositoryPostgres.countLike('comment-123');
 
       // Assert
-      expect(count).toEqual('2'); // sementara pake string, kalo butuh int jangan lupa diganti
+      expect(count).toEqual(2); // sementara pake string, kalo butuh int jangan lupa diganti
+    });
+
+    it('should return 0 if comment never get likes', async () => {
+      // Arrange
+      await UsersTableTestHelper.addUser({ id: 'user-123', username: 'first user' });
+      await UsersTableTestHelper.addUser({ id: 'user-345', username: 'second user' });
+      await ThreadsTableTestHelper.addThread({});
+      await CommentsTableTestHelper.addComment({ owner: 'user-123' });
+
+      const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {});
+
+      // Action
+      const count = await commentRepositoryPostgres.countLike('comment-123');
+
+      // Assert
+      expect(count).toEqual(1); // sementara pake string, kalo butuh int jangan lupa diganti
     });
   });
 });
