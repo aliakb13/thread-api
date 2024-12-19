@@ -95,6 +95,7 @@ describe('A Comment Object', () => {
     expect(comment.date).toEqual(payload.date);
     expect(comment.content).toEqual(payload.content);
     expect(comment.replies).toEqual(payload.replies);
+    expect(comment.likeCount).toEqual(0);
   });
 
   it('should convert to plain object if toJson() called', () => {
@@ -105,6 +106,7 @@ describe('A Comment Object', () => {
       date: {},
       content: 'some content',
       replies: [],
+      likeCount: 0,
     };
 
     // Action
@@ -117,6 +119,7 @@ describe('A Comment Object', () => {
       date: {},
       content: 'some content',
       replies: [],
+      likeCount: 0,
     });
   });
 });
