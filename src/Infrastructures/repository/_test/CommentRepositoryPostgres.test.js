@@ -313,7 +313,7 @@ describe('CommentRepositoryPostgres', () => {
   });
 
   describe('addLike function', () => {
-    it('should persist added comment and return added comment correctly', async () => {
+    it('should added like comment and must be found the added like comment', async () => {
       // Arrange
       await UsersTableTestHelper.addUser({});
       await ThreadsTableTestHelper.addThread({});
